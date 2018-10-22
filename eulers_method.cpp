@@ -7,37 +7,25 @@ QPointF eulers_method::get_next_point(QPointF prev_point)
     return QPointF(xi + h, yi + h * derivative(xi, yi));
 }
 
-QPolygonF eulers_method::find_approximate_curve()
+QPointF eulers_method::get_next_error(QPointF prev_point)
 {
-    double xi = x0;
-    QPointF current_point = QPointF(x0, y0);
-    QPointF prev_point;
-    QPolygonF result;
+    double xi = prev_point.x();
+    double yi = prev_point.y();
+    return QPointF(xi, exact_solution(xi, yi) - yi);
+}
 
-    result << current_point;
-
-    while (xi < X) {
-        prev_point = current_point;
-        current_point = get_next_point(current_point);
-        result << current_point;
-        xi = current_point.x();
-        prev_point.~QPointF();
+void eulers_method::compute_approximation() {
+    if (!computed_once) {
+        abstract_computation_method::compute_approximation();
+        computed_once = true;
     }
-
-    current_point.~QPointF();
-
-    return result;
 }
 
-QPolygonF eulers_method::find_approximation_error_curve()
-{
-//TODO: find error
+std::pair<QPolygonF, QPolygonF> eulers_method::get_approximation() {
+    return abstract_computation_method::get_approximation();
 }
 
-eulers_method::eulers_method(QPointF initial_point, double step, double border_x)
+eulers_method::eulers_method(QPointF initial_point, double step, double border_x) : abstract_computation_method (initial_point, step, border_x)
 {
-    h = step;
-    X = border_x;
-    x0 = initial_point.x();
-    y0 = initial_point.y();
+
 }

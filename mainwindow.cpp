@@ -13,10 +13,15 @@
 #include <qwt_plot_picker.h>
 #include <qwt_picker_machine.h>
 
+#include <utility>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "eulers_method.h"
+#include "eulers_approximation_curve.h"
+#include "improved_eulers_approximation_curve.h"
+#include "eulers_error_curve.h"
+#include "improved_eulers_error_curve.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,61 +43,48 @@ MainWindow::MainWindow(QWidget *parent) :
 
     d_plot->insertLegend( new QwtLegend() );
 
-
-    // Включить сетку
+    // turn on a grid
     QwtPlotGrid *grid = new QwtPlotGrid();
-    grid->setMajorPen(QPen( Qt::gray, 2 )); // цвет линий и толщина
-    grid->attach( d_plot ); // добавить сетку к полю графика
+    grid->setMajorPen(QPen( Qt::gray, 2 )); // color and thickness of lines
+    grid->attach( d_plot ); // attach grid to a plot
 
-    // Кривая
-    //#include <qwt_plot_curve.h>
-    QwtPlotCurve *curve = new QwtPlotCurve();
-    curve->setTitle( "Euler's method result" );
-    curve->setPen( Qt::blue, 5 ); // цвет и толщина кривой
-    curve->setRenderHint
-            ( QwtPlotItem::RenderAntialiased, true ); // сглаживание
+    // create curves for different approximations and attach them to the plot
+    eulers_approximation_curve *euler_curve = new eulers_approximation_curve();
+    euler_curve->attach_to_plot(d_plot);
 
-    // Маркеры кривой
-    // #include <qwt_symbol.h>
-    QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,
-        QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
-    curve->setSymbol( symbol );
+    improved_eulers_approximation_curve *improved_euler_curve = new improved_eulers_approximation_curve();
+    improved_euler_curve->attach_to_plot(d_plot);
 
-    // Добавить точки на ранее созданную кривую
-    eulers_method *euler = new eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
-    QPolygonF points = euler->find_approximate_curve();
+    // create curves for different approximation errors and attach them to the plot
+    eulers_error_curve *euler_error_curve = new eulers_error_curve();
+    euler_error_curve->attach_to_plot(d_plot);
 
-    curve->setSamples( points ); // ассоциировать набор точек с кривой
+    improved_eulers_error_curve *improved_euler_error_curve = new improved_eulers_error_curve();
+    improved_euler_error_curve->attach_to_plot(d_plot);
 
-    curve->attach( d_plot ); // отобразить кривую на графике
-
+    //enable scaling with rotation of middle mouse button
     QwtPlotMagnifier *magnifier = new QwtPlotMagnifier(d_plot->canvas());
-    // клавиша, активирующая приближение/удаление
     magnifier->setMouseButton(Qt::MiddleButton);
 
+    //enable dragging of plot with left mouse button
     QwtPlotPanner *d_panner = new QwtPlotPanner( d_plot->canvas() );
-    // клавиша, активирующая перемещение
     d_panner->setMouseButton( Qt::LeftButton );
 
-    // Включить отображение координат курсора и двух перпендикулярных
-    // линий в месте его отображения
-    // #include <qwt_plot_picker.h>
-
-     // настройка функций
+    //enable coordinate showing with perpendicular lines during dragging
     QwtPlotPicker *d_picker =
             new QwtPlotPicker(
-                QwtPlot::xBottom, QwtPlot::yLeft, // ассоциация с осями
-    QwtPlotPicker::CrossRubberBand, // стиль перпендикулярных линий
-    QwtPicker::ActiveOnly, // включение/выключение
-    d_plot->canvas() ); // ассоциация с полем
+                QwtPlot::xBottom, QwtPlot::yLeft, // association with axises
+    QwtPlotPicker::CrossRubberBand, // type of showed lines during dragging (perpendicular in this case)
+    QwtPicker::ActiveOnly, // show only on event trigger (dragging with LMB in this case)
+    d_plot->canvas() ); // association with field
 
-    // Цвет перпендикулярных линий
-    d_picker->setRubberBandPen( QColor( Qt::gray ) );
+    // color of showed lines
+    d_picker->setRubberBandPen( QColor( Qt::darkGray ) );
 
-    // цвет координат положения указателя
+    // color of showed coordinates
     d_picker->setTrackerPen( QColor( Qt::black ) );
 
-    // непосредственное включение вышеописанных функций
+    // attach new state machine that will check whether we drag plot or not
     d_picker->setStateMachine( new QwtPickerDragPointMachine() );
 }
 

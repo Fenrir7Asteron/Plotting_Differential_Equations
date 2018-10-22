@@ -29,12 +29,24 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     eulers_method.cpp \
-    abstract_computation_method.cpp
+    abstract_computation_method.cpp \
+    improved_eulers_method.cpp \
+    eulers_approximation_curve.cpp \
+    approximation_curve.cpp \
+    eulers_error_curve.cpp \
+    improved_eulers_approximation_curve.cpp \
+    improved_eulers_error_curve.cpp
 
 HEADERS += \
         mainwindow.h \
     eulers_method.h \
-    abstract_computation_method.h
+    abstract_computation_method.h \
+    improved_eulers_method.h \
+    eulers_approximation_curve.h \
+    approximation_curve.h \
+    eulers_error_curve.h \
+    improved_eulers_approximation_curve.h \
+    improved_eulers_error_curve.h
 
 FORMS += \
         mainwindow.ui
