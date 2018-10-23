@@ -1,7 +1,6 @@
 #ifndef IMPROVED_EULERS_METHOD_H
 #define IMPROVED_EULERS_METHOD_H
 
-#include <QMainWindow>
 #include "abstract_computation_method.h"
 
 class improved_eulers_method : public abstract_computation_method

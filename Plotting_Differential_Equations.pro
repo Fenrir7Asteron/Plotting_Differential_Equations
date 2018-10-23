@@ -24,29 +24,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+INCLUDEPATH += computation_method_headers \
+    curve_headers
+
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    eulers_method.cpp \
-    abstract_computation_method.cpp \
-    improved_eulers_method.cpp \
-    eulers_approximation_curve.cpp \
-    approximation_curve.cpp \
-    eulers_error_curve.cpp \
-    improved_eulers_approximation_curve.cpp \
-    improved_eulers_error_curve.cpp
+    computation_method_sources/abstract_computation_method.cpp \
+    computation_method_sources/eulers_method.cpp \
+    computation_method_sources/improved_eulers_method.cpp \
+    computation_method_sources/runge_kutta_method.cpp \
+    curve_sources/approximation_curve.cpp \
+    curve_sources/eulers_approximation_curve.cpp \
+    curve_sources/eulers_error_curve.cpp \
+    curve_sources/improved_eulers_approximation_curve.cpp \
+    curve_sources/improved_eulers_error_curve.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    curve_sources/runge_kutta_approximation_curve.cpp \
+    curve_sources/runge_kutta_error_curve.cpp
 
 HEADERS += \
-        mainwindow.h \
-    eulers_method.h \
-    abstract_computation_method.h \
-    improved_eulers_method.h \
-    eulers_approximation_curve.h \
-    approximation_curve.h \
-    eulers_error_curve.h \
-    improved_eulers_approximation_curve.h \
-    improved_eulers_error_curve.h
+    computation_method_headers/abstract_computation_method.h \
+    computation_method_headers/eulers_method.h \
+    computation_method_headers/improved_eulers_method.h \
+    computation_method_headers/runge_kutta_method.h \
+    curve_headers/approximation_curve.h \
+    curve_headers/eulers_approximation_curve.h \
+    curve_headers/eulers_error_curve.h \
+    curve_headers/improved_eulers_approximation_curve.h \
+    curve_headers/improved_eulers_error_curve.h \
+    mainwindow.h \
+    curve_headers/runge_kutta_approximation_curve.h \
+    curve_headers/runge_kutta_error_curve.h
 
 FORMS += \
         mainwindow.ui

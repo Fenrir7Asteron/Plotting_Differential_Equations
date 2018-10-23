@@ -1,10 +1,10 @@
-#include "improved_eulers_error_curve.h"
+#include "eulers_error_curve.h"
 
-improved_eulers_error_curve::improved_eulers_error_curve()
+eulers_error_curve::eulers_error_curve()
 {
-    // create curve for Euler's method
+    // create error curve for Euler's method
     this->setTitle( "Euler's method approximation error curve" );
-    this->setPen( Qt::darkRed, 5 ); // color and thickness of a curve
+    this->setPen( Qt::red, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
 
@@ -14,7 +14,7 @@ improved_eulers_error_curve::improved_eulers_error_curve()
     this->setSymbol( approximation_error_symbol );
 
     // applying Euler's method to get points for our curve
-    improved_eulers_method *euler = new improved_eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
+    eulers_method *euler = new eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
     euler->compute_approximation();
     QPolygonF euler_points = euler->get_approximation().second;
 
@@ -22,6 +22,7 @@ improved_eulers_error_curve::improved_eulers_error_curve()
     this->setSamples( euler_points );
 }
 
-void improved_eulers_error_curve::attach_to_plot(QwtPlot *d_plot)  {
+void eulers_error_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
 }
+

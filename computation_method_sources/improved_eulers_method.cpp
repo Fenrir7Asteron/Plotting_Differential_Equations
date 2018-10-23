@@ -11,9 +11,7 @@ QPointF improved_eulers_method::get_next_point(QPointF prev_point)
 
 QPointF improved_eulers_method::get_next_error(QPointF prev_point)
 {
-    double xi = prev_point.x();
-    double yi = prev_point.y();
-    return QPointF(xi, exact_solution(xi, yi) - yi);
+    return abstract_computation_method::get_next_error(prev_point);
 }
 
 std::pair<QPolygonF, QPolygonF> improved_eulers_method::get_approximation() {

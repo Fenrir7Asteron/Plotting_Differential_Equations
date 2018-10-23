@@ -37,6 +37,13 @@ std::pair<QPolygonF, QPolygonF> abstract_computation_method::get_approximation()
     return approximation_curves;
 }
 
+QPointF abstract_computation_method::get_next_error(QPointF prev_point)
+{
+    double xi = prev_point.x();
+    double yi = prev_point.y();
+    return QPointF(xi, exact_solution(xi, yi) - yi);
+}
+
 abstract_computation_method::abstract_computation_method(QPointF initial_point, double step, double border_x)
 {
     h = step;

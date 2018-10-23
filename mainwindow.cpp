@@ -20,8 +20,10 @@
 
 #include "eulers_approximation_curve.h"
 #include "improved_eulers_approximation_curve.h"
+#include "runge_kutta_approximation_curve.h"
 #include "eulers_error_curve.h"
 #include "improved_eulers_error_curve.h"
+#include "runge_kutta_error_curve.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -55,12 +57,18 @@ MainWindow::MainWindow(QWidget *parent) :
     improved_eulers_approximation_curve *improved_euler_curve = new improved_eulers_approximation_curve();
     improved_euler_curve->attach_to_plot(d_plot);
 
-    // create curves for different approximation errors and attach them to the plot
-    eulers_error_curve *euler_error_curve = new eulers_error_curve();
-    euler_error_curve->attach_to_plot(d_plot);
+    runge_kutta_approximation_curve *runge_kutta_curve = new runge_kutta_approximation_curve();
+    runge_kutta_curve->attach_to_plot(d_plot);
 
-    improved_eulers_error_curve *improved_euler_error_curve = new improved_eulers_error_curve();
-    improved_euler_error_curve->attach_to_plot(d_plot);
+    // create curves for different approximation errors and attach them to the plot
+    eulers_error_curve *euler_error = new eulers_error_curve();
+    euler_error->attach_to_plot(d_plot);
+
+    improved_eulers_error_curve *improved_euler_error = new improved_eulers_error_curve();
+    improved_euler_error->attach_to_plot(d_plot);
+
+    runge_kutta_error_curve *runge_kutta_error = new runge_kutta_error_curve();
+    runge_kutta_error->attach_to_plot(d_plot);
 
     //enable scaling with rotation of middle mouse button
     QwtPlotMagnifier *magnifier = new QwtPlotMagnifier(d_plot->canvas());

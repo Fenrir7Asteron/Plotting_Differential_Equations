@@ -1,10 +1,10 @@
-#include "eulers_error_curve.h"
+#include "runge_kutta_error_curve.h"
 
-eulers_error_curve::eulers_error_curve()
+runge_kutta_error_curve::runge_kutta_error_curve()
 {
-    // create curve for Euler's method
-    this->setTitle( "Euler's method approximation error curve" );
-    this->setPen( Qt::red, 5 ); // color and thickness of a curve
+    // create error curve for Runge-Kutta method
+    this->setTitle( "Runge-Kutta method approximation error curve" );
+    this->setPen( Qt::magenta, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
 
@@ -14,7 +14,7 @@ eulers_error_curve::eulers_error_curve()
     this->setSymbol( approximation_error_symbol );
 
     // applying Euler's method to get points for our curve
-    eulers_method *euler = new eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
+    runge_kutta_method *euler = new runge_kutta_method(QPointF(X0, Y0), STEP, BORDER_X);
     euler->compute_approximation();
     QPolygonF euler_points = euler->get_approximation().second;
 
@@ -22,7 +22,7 @@ eulers_error_curve::eulers_error_curve()
     this->setSamples( euler_points );
 }
 
-void eulers_error_curve::attach_to_plot(QwtPlot *d_plot)  {
+void runge_kutta_error_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
 }
 

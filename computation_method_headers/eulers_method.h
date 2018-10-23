@@ -1,7 +1,6 @@
 #ifndef EULERS_METHOD_H
 #define EULERS_METHOD_H
 
-#include <QMainWindow>
 #include "abstract_computation_method.h"
 
 class eulers_method : public abstract_computation_method
