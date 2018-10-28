@@ -6,6 +6,16 @@
 #include <QLabel>
 #include <QLineEdit>
 
+#include <qwt_plot.h>
+#include <qwt_plot_grid.h>
+#include <qwt_plot_magnifier.h>
+#include <qwt_plot_panner.h>
+#include <qwt_plot_picker.h>
+#include <qwt_picker_machine.h>
+#include <qwt_legend.h>
+
+#include <qlineedit.h>
+
 #include "approximation_curve.h"
 #include "eulers_approximation_curve.h"
 #include "improved_eulers_approximation_curve.h"
@@ -39,6 +49,8 @@ private:
     QCheckBox *box5;
     QCheckBox *box6;
 
+    approximation_curve *array_of_curves[6];
+
     eulers_approximation_curve *euler_curve;
     improved_eulers_approximation_curve *improved_euler_curve;
     runge_kutta_approximation_curve *runge_kutta_curve;
@@ -59,6 +71,11 @@ private Q_SLOTS:
     void toggle_euler_error(bool is_checked);
     void toggle_improved_euler_error(bool is_checked);
     void toggle_runge_kutta_error(bool is_checked);
+
+    void update_x0(QString text);
+    void update_y0(QString text);
+    void update_X(QString text);
+    void update_step(QString text);
 };
 
 #endif // MAINWINDOW_H

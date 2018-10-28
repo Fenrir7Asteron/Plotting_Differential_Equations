@@ -15,12 +15,6 @@ QPointF runge_kutta_method::get_next_error(QPointF prev_point)
 {
     return abstract_computation_method::get_next_error(prev_point);
 }
-void runge_kutta_method::compute_approximation() {
-    if (!computed_once) {
-        abstract_computation_method::compute_approximation();
-        computed_once = true;
-    }
-}
 
 std::pair<QPolygonF, QPolygonF> runge_kutta_method::get_approximation() {
     return abstract_computation_method::get_approximation();

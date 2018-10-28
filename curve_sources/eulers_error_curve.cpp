@@ -3,7 +3,7 @@
 eulers_error_curve::eulers_error_curve()
 {
     // create error curve for Euler's method
-    this->setTitle( "Euler's method approximation error curve" );
+    this->setTitle( "Euler's approximation error curve" );
     this->setPen( Qt::red, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
@@ -14,9 +14,9 @@ eulers_error_curve::eulers_error_curve()
     this->setSymbol( approximation_error_symbol );
 
     // applying Euler's method to get points for our curve
-    eulers_method *euler = new eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
-    euler->compute_approximation();
-    QPolygonF euler_points = euler->get_approximation().second;
+    method = new eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
+    method->compute_approximation();
+    QPolygonF euler_points = method->get_approximation().second;
 
     //attach points to the curves
     this->setSamples( euler_points );
@@ -26,3 +26,7 @@ void eulers_error_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
 }
 
+void eulers_error_curve::update_initial_values(int field_to_update, double new_value) {
+    approximation_curve::update_initial_values(field_to_update, new_value);
+    this->setSamples( method->get_approximation().second );
+}

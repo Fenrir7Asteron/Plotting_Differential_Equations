@@ -1,30 +1,5 @@
-#include <qwt_plot.h>
-#include <qwt_plot_grid.h>
-
-#include <qwt_legend.h>
-
-#include <qwt_plot_curve.h>
-#include <qwt_symbol.h>
-
-#include <qwt_plot_magnifier.h>
-
-#include <qwt_plot_panner.h>
-
-#include <qwt_plot_picker.h>
-#include <qwt_picker_machine.h>
-
-#include <qlineedit.h>
-#include <qtoolbutton.h>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-#include "eulers_approximation_curve.h"
-#include "improved_eulers_approximation_curve.h"
-#include "runge_kutta_approximation_curve.h"
-#include "eulers_error_curve.h"
-#include "improved_eulers_error_curve.h"
-#include "runge_kutta_error_curve.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     d_plot = new QwtPlot( this );
     setCentralWidget(d_plot);
 
-    d_plot->setMinimumWidth(750);
+    d_plot->setMinimumWidth(700);
 
     d_plot->setTitle("Approximate plot of DE"); // name of the plot
     d_plot->setCanvasBackground(Qt::white); // background color
@@ -76,6 +51,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     runge_kutta_error = new runge_kutta_error_curve();
     runge_kutta_error->attach_to_plot(d_plot);
+
+    // save curves to an array in order to update initial values later
+    array_of_curves[0] = euler_curve;
+    array_of_curves[1] = improved_euler_curve;
+    array_of_curves[2] = runge_kutta_curve;
+    array_of_curves[3] = euler_error;
+    array_of_curves[4] = improved_euler_error;
+    array_of_curves[5] = runge_kutta_error;
 
     //enable scaling with rotation of middle mouse button
     QwtPlotMagnifier *magnifier = new QwtPlotMagnifier(d_plot->canvas());
@@ -133,26 +116,35 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QLineEdit *x0 = new QLineEdit();
     add_line_edit(x0);
+    connect(x0, SIGNAL(textChanged(QString)), SLOT(update_x0(QString)));
+    x0->setText("0"); // set default value to x0 field
 
     QLabel *y0_label = new QLabel(toolBar2);
     add_label(y0_label, "y0");
 
     QLineEdit *y0 = new QLineEdit();
     add_line_edit(y0);
+    connect(y0, SIGNAL(textChanged(QString)), SLOT(update_y0(QString)));
+    y0->setText("1"); // set default value to y0 field
 
     QLabel *X_label = new QLabel(toolBar2);
     add_label(X_label, "X");
 
     QLineEdit *X = new QLineEdit();
     add_line_edit(X);
+    connect(X, SIGNAL(textChanged(QString)), SLOT(update_X(QString)));
+    X->setText("12.5"); // set default value to X field
 
     QLabel *step_label = new QLabel(toolBar2);
-    add_label(step_label, "step");
+    add_label(step_label, "step [0.0001, +inf)"); //TODO: remove when the boundary will be updated
 
     QLineEdit *step = new QLineEdit();
     add_line_edit(step);
+    connect(step, SIGNAL(textChanged(QString)), SLOT(update_step(QString)));
+    step->setText("0.1"); // set default value to step field
 }
 
+// procedures for creating toolbars
 void MainWindow::setToolBar1()
 {
     toolBar1 = new QToolBar( this );
@@ -167,25 +159,29 @@ void MainWindow::setToolBar2()
     addToolBar(  Qt::RightToolBarArea, toolBar2 );
 }
 
+// procedure for creating a checkbox
 void MainWindow::add_box(QCheckBox *box, QString text)
 {
     box->setText( text );
     box->setCheckable( true );
     box->setChecked(true);
 
-    toolBar1->addWidget( box ); // добавить кнопку на панель инструментов
+    toolBar1->addWidget( box ); // add button to the check boxes tool bar (first)
 }
 
+// procedure for creating a label
 void MainWindow::add_label(QLabel *label, QString text) {
     label->setText(text);
-    toolBar2->addWidget(label);
+    toolBar2->addWidget(label); // add label to the initial values tool bar (second)
 }
 
+// procedure for creating a field for an initial value
 void MainWindow::add_line_edit(QLineEdit *line) {
     line->setMaximumWidth(80);
-    toolBar2->addWidget(line);
+    toolBar2->addWidget(line); // add box for editing an initial value to the initial values tool bar (second)
 }
 
+// slots that handle signals
 void MainWindow::toggle_euler_approximation(bool is_checked) {
     is_checked ? euler_curve->show() : euler_curve->hide();
     d_plot->replot();
@@ -216,6 +212,45 @@ void MainWindow::toggle_runge_kutta_error(bool is_checked) {
     d_plot->replot();
 }
 
+void MainWindow::update_x0(QString text) {
+    double x0 = text.toDouble();
+
+    for (auto curve : array_of_curves) {
+        curve->update_initial_values(0, x0);
+    }
+    d_plot->replot();
+}
+
+void MainWindow::update_y0(QString text) {
+    double y0 = text.toDouble();
+
+    for (auto curve : array_of_curves) {
+        curve->update_initial_values(1, y0);
+    }
+    d_plot->replot();
+}
+
+void MainWindow::update_X(QString text) {
+    double X = text.toDouble();
+
+    for (auto curve : array_of_curves) {
+        curve->update_initial_values(2, X);
+    }
+    d_plot->replot();
+}
+
+void MainWindow::update_step(QString text) {
+    double step = text.toDouble();
+
+    if (step >= 0.0001) { // TODO: replace by (x0 / step * 6) < 1000000 (need getters for x0 and step)
+        for (auto curve : array_of_curves) {
+            curve->update_initial_values(3, step);
+        }
+        d_plot->replot();
+    }
+}
+
+// destructor
 MainWindow::~MainWindow()
 {
     delete ui;

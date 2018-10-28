@@ -3,7 +3,7 @@
 improved_eulers_approximation_curve::improved_eulers_approximation_curve()
 {
     // create approximation curve for Improved Euler's method
-    this->setTitle( "Improved Euler's method approximate solution" );
+    this->setTitle( "Improved Euler's approximate solution" );
     this->setPen( Qt::darkBlue, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
@@ -14,9 +14,9 @@ improved_eulers_approximation_curve::improved_eulers_approximation_curve()
     this->setSymbol( approximation_symbol );
 
     // applying Euler's method to get points for our curve
-    improved_eulers_method *euler = new improved_eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
-    euler->compute_approximation();
-    QPolygonF euler_points = euler->get_approximation().first;
+    method = new improved_eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
+    method->compute_approximation();
+    QPolygonF euler_points = method->get_approximation().first;
 
     //attach points to the curves
     this->setSamples( euler_points );
@@ -24,4 +24,9 @@ improved_eulers_approximation_curve::improved_eulers_approximation_curve()
 
 void improved_eulers_approximation_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
+}
+
+void improved_eulers_approximation_curve::update_initial_values(int field_to_update, double new_value) {
+    approximation_curve::update_initial_values(field_to_update, new_value);
+    this->setSamples( method->get_approximation().first );
 }

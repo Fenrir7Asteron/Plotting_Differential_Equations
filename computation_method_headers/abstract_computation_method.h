@@ -7,7 +7,7 @@
 //define DE to plot
 #define X0 0
 #define Y0 1
-#define STEP 0.1
+#define STEP 1
 #define BORDER_X 12.5
 #define derivative(x, y) (sin(x) + y)
 #define exact_solution(x, y) ((3 * exp(x) - sin(x) - cos(x)) * 0.5)
@@ -18,6 +18,8 @@ public:
     abstract_computation_method(QPointF, double, double);
     void compute_approximation();
     std::pair <QPolygonF, QPolygonF> get_approximation();
+
+    void update_initial_values(int field_to_update, double new_value);
 
 protected:
     virtual QPointF get_next_point(QPointF prev_point) = 0;

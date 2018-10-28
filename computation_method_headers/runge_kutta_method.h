@@ -7,7 +7,6 @@ class runge_kutta_method : public abstract_computation_method
 {
 public:
     runge_kutta_method(QPointF, double, double);
-    void compute_approximation();
     std::pair<QPolygonF, QPolygonF> get_approximation();
 
 protected:

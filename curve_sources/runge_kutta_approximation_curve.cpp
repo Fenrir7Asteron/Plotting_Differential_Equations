@@ -3,7 +3,7 @@
 runge_kutta_approximation_curve::runge_kutta_approximation_curve()
 {
     // create approximation curve for Runge-Kutta method
-    this->setTitle( "Runge-Kutta method approximate solution" );
+    this->setTitle( "Runge-Kutta approximate solution" );
     this->setPen( Qt::green, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
@@ -14,9 +14,9 @@ runge_kutta_approximation_curve::runge_kutta_approximation_curve()
     this->setSymbol( approximation_symbol );
 
     // applying Euler's method to get points for our curve
-    runge_kutta_method *euler = new runge_kutta_method(QPointF(X0, Y0), STEP, BORDER_X);
-    euler->compute_approximation();
-    QPolygonF euler_points = euler->get_approximation().first;
+    method = new runge_kutta_method(QPointF(X0, Y0), STEP, BORDER_X);
+    method->compute_approximation();
+    QPolygonF euler_points = method->get_approximation().first;
 
     //attach points to the curves
     this->setSamples( euler_points );
@@ -24,4 +24,9 @@ runge_kutta_approximation_curve::runge_kutta_approximation_curve()
 
 void runge_kutta_approximation_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
+}
+
+void runge_kutta_approximation_curve::update_initial_values(int field_to_update, double new_value) {
+    approximation_curve::update_initial_values(field_to_update, new_value);
+    this->setSamples( method->get_approximation().first );
 }

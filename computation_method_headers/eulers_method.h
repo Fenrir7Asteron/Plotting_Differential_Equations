@@ -7,7 +7,6 @@ class eulers_method : public abstract_computation_method
 {
 public:
     eulers_method(QPointF, double, double);
-    void compute_approximation();
     std::pair<QPolygonF, QPolygonF> get_approximation();
 
 protected:
