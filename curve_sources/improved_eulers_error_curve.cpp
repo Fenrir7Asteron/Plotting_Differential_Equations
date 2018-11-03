@@ -12,21 +12,15 @@ improved_eulers_error_curve::improved_eulers_error_curve()
     QwtSymbol *approximation_error_symbol = new QwtSymbol( QwtSymbol::Ellipse,
         QBrush( Qt::black ), QPen( Qt::darkGray, 2 ), QSize( 7, 7 ) );
     this->setSymbol( approximation_error_symbol );
-
-    // applying Euler's method to get points for our curve
-    method = new improved_eulers_method(QPointF(X0, Y0), STEP, BORDER_X);
-    method->compute_approximation();
-    QPolygonF euler_points = method->get_approximation().second;
-
-    //attach points to the curves
-    this->setSamples( euler_points );
 }
 
+// attach a curve to the plot
 void improved_eulers_error_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
 }
 
-void improved_eulers_error_curve::update_initial_values(int field_to_update, double new_value) {
-    approximation_curve::update_initial_values(field_to_update, new_value);
+// update initial values of a method and recompute points, attach new points to a curve
+void improved_eulers_error_curve::update_initial_values(abstract_computation_method *method, int field_to_update, double new_value) {
+    approximation_curve::update_initial_values(method, field_to_update, new_value);
     this->setSamples( method->get_approximation().second );
 }

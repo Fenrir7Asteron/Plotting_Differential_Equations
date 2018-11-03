@@ -1,10 +1,10 @@
-#include "improved_eulers_approximation_curve.h"
+#include "exact_solution_curve.h"
 
-improved_eulers_approximation_curve::improved_eulers_approximation_curve()
+exact_solution_curve::exact_solution_curve()
 {
-    // create approximation curve for Improved Euler's method
-    this->setTitle( "Improved Euler's approximate solution" );
-    this->setPen( Qt::darkBlue, 5 ); // color and thickness of a curve
+    // create curve for exact solution
+    this->setTitle( "Exact solution" );
+    this->setPen( Qt::yellow, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
 
@@ -15,12 +15,12 @@ improved_eulers_approximation_curve::improved_eulers_approximation_curve()
 }
 
 // attach a curve to the plot
-void improved_eulers_approximation_curve::attach_to_plot(QwtPlot *d_plot)  {
+void exact_solution_curve::attach_to_plot(QwtPlot *d_plot)  {
     approximation_curve::attach_to_plot(d_plot);
 }
 
 // update initial values of a method and recompute points, attach new points to a curve
-void improved_eulers_approximation_curve::update_initial_values(abstract_computation_method *method, int field_to_update, double new_value) {
+void exact_solution_curve::update_initial_values(abstract_computation_method *method, int field_to_update, double new_value) {
     approximation_curve::update_initial_values(method, field_to_update, new_value);
     this->setSamples( method->get_approximation().first );
 }

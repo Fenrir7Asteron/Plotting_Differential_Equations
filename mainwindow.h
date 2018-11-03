@@ -16,7 +16,15 @@
 
 #include <qlineedit.h>
 
+#include <thread>
+
+#include "exact_method.h"
+#include "eulers_method.h"
+#include "improved_eulers_method.h"
+#include "runge_kutta_method.h"
+
 #include "approximation_curve.h"
+#include "exact_solution_curve.h"
 #include "eulers_approximation_curve.h"
 #include "improved_eulers_approximation_curve.h"
 #include "runge_kutta_approximation_curve.h"
@@ -36,35 +44,26 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void thread_function(int field_to_update, double new_value, approximation_curve *curve, abstract_computation_method *method);
+
 private:
     Ui::MainWindow *ui;
     QwtPlot *d_plot;
-    QToolBar *toolBar1;
-    QToolBar *toolBar2;
+    QToolBar *checkbox_toolbar;
+    QToolBar *iv_toolbar; // initial value fields toolbar
+    QCheckBox *box[7];
 
-    QCheckBox *box1;
-    QCheckBox *box2;
-    QCheckBox *box3;
-    QCheckBox *box4;
-    QCheckBox *box5;
-    QCheckBox *box6;
+    approximation_curve *array_of_curves[7]; // [0] - exact, [1 - 3] - approximations, [4 - 6] - absolute errors
+    abstract_computation_method *array_of_methods[4]; // [0] - exact, [1] - Euler, [2] - Improved Euler, [3] - Runge-Kutta
 
-    approximation_curve *array_of_curves[6];
-
-    eulers_approximation_curve *euler_curve;
-    improved_eulers_approximation_curve *improved_euler_curve;
-    runge_kutta_approximation_curve *runge_kutta_curve;
-    eulers_error_curve *euler_error;
-    improved_eulers_error_curve *improved_euler_error;
-    runge_kutta_error_curve *runge_kutta_error;
-
-    void setToolBar1();
-    void setToolBar2();
+    void set_checkbox_toolbar();
+    void set_iv_toolbar();
     void add_box(QCheckBox *box, QString text);
     void add_label(QLabel *label, QString text);
     void add_line_edit(QLineEdit *line);
 
 private Q_SLOTS:
+    void toggle_exact_solution(bool is_checked);
     void toggle_euler_approximation(bool is_checked);
     void toggle_improved_euler_approximation(bool is_checked);
     void toggle_runge_kutta_approximation(bool is_checked);

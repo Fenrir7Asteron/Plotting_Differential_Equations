@@ -11,10 +11,7 @@ class approximation_curve : public QwtPlotCurve
 public:
     approximation_curve();
     void attach_to_plot(QwtPlot*);
-    virtual void update_initial_values(int field_to_update, double new_value);
-
-protected:
-    abstract_computation_method *method;
+    virtual void update_initial_values(abstract_computation_method *method, int field_to_update, double new_value);
 };
 
 #endif // APPROXIMATION_CURVE_H

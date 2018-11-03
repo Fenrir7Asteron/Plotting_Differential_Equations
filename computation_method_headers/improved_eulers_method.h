@@ -6,7 +6,7 @@
 class improved_eulers_method : public abstract_computation_method
 {
 public:
-    improved_eulers_method(QPointF, double, double);
+    improved_eulers_method();
     std::pair<QPolygonF, QPolygonF> get_approximation();
 
 protected:
