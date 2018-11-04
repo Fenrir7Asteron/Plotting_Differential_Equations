@@ -1,7 +1,7 @@
 #ifndef RUNGE_KUTTA_ERROR_CURVE_H
 #define RUNGE_KUTTA_ERROR_CURVE_H
 
-#include "approximation_curve.h"
+#include "curve.h"
 
 class runge_kutta_error_curve : public approximation_curve
 {

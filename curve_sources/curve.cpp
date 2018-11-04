@@ -1,4 +1,4 @@
-#include "approximation_curve.h"
+#include "curve.h"
 
 // constructor
 approximation_curve::approximation_curve()

@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // set toolbars
     set_checkbox_toolbar();
     set_iv_toolbar();
 
@@ -21,9 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // parameters of axises
     d_plot->setAxisTitle(QwtPlot::yLeft, "Y");
     d_plot->setAxisTitle(QwtPlot::xBottom, "X");
+    d_plot->setAxisScale(QwtPlot::yLeft, 0, 100);
 
-    d_plot->setAxisScale(QwtPlot::yLeft, 0, 40);
-
+    // enable legend
     QwtLegend *legend = new QwtLegend();
     d_plot->insertLegend( legend, QwtPlot::BottomLegend );
 
@@ -124,7 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
     X->setText("12.5"); // set default value to X field
 
     QLabel *step_label = new QLabel(iv_toolbar);
-    add_label(step_label, "step [0.0001, +inf)"); //TODO: remove when the boundary will be updated
+    add_label(step_label, "step [0.0001, +inf)");
 
     QLineEdit *step = new QLineEdit();
     add_line_edit(step);
@@ -217,7 +218,7 @@ void MainWindow::update_x0(QString text) {
 
     // update approximation curves
     for (int i = 0; i < 4; ++i) {
-        // create a new thread that will update initial values and recalculate an appropriate approximation curve
+        // create a new thread that will update initial values and recalculate an appropriate approximation/exact curve
         threads.push_back(std::thread(&MainWindow::thread_function, this, 0, x0, array_of_curves[i], array_of_methods[i]));
     }
     // wait for termination of new threads (synchronization)
@@ -246,7 +247,7 @@ void MainWindow::update_y0(QString text) {
 
     // update approximation curves
     for (int i = 0; i < 4; ++i) {
-        // create a new thread that will update initial values and recalculate an appropriate approximation curve
+        // create a new thread that will update initial values and recalculate an appropriate approximation/exact curve
         threads.push_back(std::thread(&MainWindow::thread_function, this, 1, y0, array_of_curves[i], array_of_methods[i]));
     }
     // wait for termination of new threads (synchronization)
@@ -275,7 +276,7 @@ void MainWindow::update_X(QString text) {
 
     // update approximation curves
     for (int i = 0; i < 4; ++i) {
-        // create a new thread that will update initial values and recalculate an appropriate approximation curve
+        // create a new thread that will update initial values and recalculate an appropriate approximation/exact curve
         threads.push_back(std::thread(&MainWindow::thread_function, this, 2, X, array_of_curves[i], array_of_methods[i]));
     }
     // wait for termination of new threads (synchronization)
@@ -306,7 +307,7 @@ void MainWindow::update_step(QString text) {
 
         // update approximation curves
         for (int i = 0; i < 4; ++i) {
-            // create a new thread that will update initial values and recalculate an appropriate approximation curve
+            // create a new thread that will update initial values and recalculate an appropriate approximation/exact curve
             threads.push_back(std::thread(&MainWindow::thread_function, this, 3, step, array_of_curves[i], array_of_methods[i]));
         }
         // wait for termination of new threads (synchronization)

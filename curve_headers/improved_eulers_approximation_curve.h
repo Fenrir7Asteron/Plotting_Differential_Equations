@@ -1,7 +1,7 @@
 #ifndef IMPROVED_EULERS_APPROXIMATION_CURVE_H
 #define IMPROVED_EULERS_APPROXIMATION_CURVE_H
 
-#include "approximation_curve.h"
+#include "curve.h"
 
 class improved_eulers_approximation_curve : public approximation_curve
 {

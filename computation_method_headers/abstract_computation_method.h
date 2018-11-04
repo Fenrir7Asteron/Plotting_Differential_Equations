@@ -26,7 +26,7 @@ public:
 protected:
     virtual QPointF get_next_point(QPointF prev_point) = 0;
     QPointF get_next_error(QPointF);
-    std::pair <QPolygonF, QPolygonF> approximation_curves;
+    std::pair <QPolygonF, QPolygonF> computed_curves;
 
     double derivative(double x, double y);
     double C();

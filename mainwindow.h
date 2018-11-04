@@ -23,7 +23,7 @@
 #include "improved_eulers_method.h"
 #include "runge_kutta_method.h"
 
-#include "approximation_curve.h"
+#include "curve.h"
 #include "exact_solution_curve.h"
 #include "eulers_approximation_curve.h"
 #include "improved_eulers_approximation_curve.h"

@@ -11,7 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Plotting_Differential_Equations
 TEMPLATE = app
 
-CONFIG += c++11
+CONFIG += c++11 \
+    qwt
 
 INCLUDEPATH += computation_method_headers \
     curve_headers
@@ -23,7 +24,6 @@ SOURCES += \
     computation_method_sources/improved_eulers_method.cpp \
     computation_method_sources/runge_kutta_method.cpp \
     computation_method_sources/exact_method.cpp \
-    curve_sources/approximation_curve.cpp \
     curve_sources/eulers_approximation_curve.cpp \
     curve_sources/eulers_error_curve.cpp \
     curve_sources/improved_eulers_approximation_curve.cpp \
@@ -33,6 +33,7 @@ SOURCES += \
     curve_sources/exact_solution_curve.cpp \
     main.cpp \
     mainwindow.cpp \
+    curve_sources/curve.cpp
 
 HEADERS += \
     computation_method_headers/abstract_computation_method.h \
@@ -40,7 +41,6 @@ HEADERS += \
     computation_method_headers/improved_eulers_method.h \
     computation_method_headers/runge_kutta_method.h \
     computation_method_headers/exact_method.h \
-    curve_headers/approximation_curve.h \
     curve_headers/eulers_approximation_curve.h \
     curve_headers/eulers_error_curve.h \
     curve_headers/improved_eulers_approximation_curve.h \
@@ -49,6 +49,7 @@ HEADERS += \
     curve_headers/runge_kutta_error_curve.h \
     curve_headers/exact_solution_curve.h \
     mainwindow.h \
+    curve_headers/curve.h
 
 FORMS += \
         mainwindow.ui
@@ -57,5 +58,3 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-CONFIG += qwt

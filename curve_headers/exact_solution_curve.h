@@ -1,7 +1,7 @@
 #ifndef EXACT_SOLUTION_CURVE_H
 #define EXACT_SOLUTION_CURVE_H
 
-#include "approximation_curve.h"
+#include "curve.h"
 
 class exact_solution_curve : public approximation_curve
 {
