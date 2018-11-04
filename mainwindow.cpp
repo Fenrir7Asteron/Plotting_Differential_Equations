@@ -10,11 +10,12 @@ MainWindow::MainWindow(QWidget *parent) :
     // set toolbars
     set_checkbox_toolbar();
     set_iv_toolbar();
+    set_global_errors_toolbar();
 
     d_plot = new QwtPlot( this );
     setCentralWidget(d_plot);
 
-    d_plot->setMinimumWidth(820);
+    d_plot->setMinimumWidth(800);
 
     d_plot->setTitle("Approximate plot of DE"); // name of the plot
     d_plot->setCanvasBackground(Qt::white); // background color
@@ -99,9 +100,36 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(box[5], SIGNAL(toggled(bool)), SLOT(toggle_improved_euler_error(bool)));
     connect(box[6], SIGNAL(toggled(bool)), SLOT(toggle_runge_kutta_error(bool)));
 
+    // label global_errors_toolbar
+    QLabel *global_error_label = new QLabel(global_errors_toolbar);
+    global_error_label->setStyleSheet("font-weight: bold; color: darkRed");
+    add_label(global_errors_toolbar, global_error_label, "Global errors\n");
+
+    // create fields for viewing global errors
+    global_error[0] = new QLineEdit();
+    global_error[1] = new QLineEdit();
+    global_error[2] = new QLineEdit();
+
+    QLabel *euler_error = new QLabel();
+    add_label(global_errors_toolbar, euler_error, "Euler");
+    add_read_only_line_edit(global_error[0]);
+
+    QLabel *improved_euler_error = new QLabel();
+    add_label(global_errors_toolbar, improved_euler_error, "Improved Euler");
+    add_read_only_line_edit(global_error[1]);
+
+    QLabel *runge_kutta_error = new QLabel();
+    add_label(global_errors_toolbar, runge_kutta_error, "Runge-Kutta");
+    add_read_only_line_edit(global_error[2]);
+
+    // label iv_toolbar
+    QLabel *initial_values_label = new QLabel(iv_toolbar);
+    initial_values_label->setStyleSheet("font-weight: bold");
+    add_label(iv_toolbar, initial_values_label, "Initial values\n");
+
     // create fields for entering initial values (x0, y0, X, step)
     QLabel *x0_label = new QLabel(iv_toolbar);
-    add_label(x0_label, "x0");
+    add_label(iv_toolbar, x0_label, "x0");
 
     QLineEdit *x0 = new QLineEdit();
     add_line_edit(x0);
@@ -109,7 +137,7 @@ MainWindow::MainWindow(QWidget *parent) :
     x0->setText("0"); // set default value to x0 field
 
     QLabel *y0_label = new QLabel(iv_toolbar);
-    add_label(y0_label, "y0");
+    add_label(iv_toolbar, y0_label, "y0");
 
     QLineEdit *y0 = new QLineEdit();
     add_line_edit(y0);
@@ -117,7 +145,7 @@ MainWindow::MainWindow(QWidget *parent) :
     y0->setText("1"); // set default value to y0 field
 
     QLabel *X_label = new QLabel(iv_toolbar);
-    add_label(X_label, "X");
+    add_label(iv_toolbar, X_label, "X");
 
     QLineEdit *X = new QLineEdit();
     add_line_edit(X);
@@ -125,7 +153,7 @@ MainWindow::MainWindow(QWidget *parent) :
     X->setText("12.5"); // set default value to X field
 
     QLabel *step_label = new QLabel(iv_toolbar);
-    add_label(step_label, "step [0.0001, +inf)");
+    add_label(iv_toolbar, step_label, "step [0.0001, +inf)");
 
     QLineEdit *step = new QLineEdit();
     add_line_edit(step);
@@ -148,6 +176,13 @@ void MainWindow::set_iv_toolbar()
     addToolBar(  Qt::RightToolBarArea, iv_toolbar );
 }
 
+void MainWindow::set_global_errors_toolbar()
+{
+    global_errors_toolbar = new QToolBar(this );
+    global_errors_toolbar->setMovable(false);
+    addToolBar(  Qt::RightToolBarArea, global_errors_toolbar );
+}
+
 // procedure for creating a checkbox
 void MainWindow::add_box(QCheckBox *box, QString text)
 {
@@ -159,15 +194,35 @@ void MainWindow::add_box(QCheckBox *box, QString text)
 }
 
 // procedure for creating a label
-void MainWindow::add_label(QLabel *label, QString text) {
+void MainWindow::add_label(QToolBar *toolbar, QLabel *label, QString text) {
     label->setText(text);
-    iv_toolbar->addWidget(label); // add label to the initial values tool bar (second)
+    toolbar->addWidget(label); // add label to the initial values tool bar (second)
 }
 
 // procedure for creating a field for an initial value
 void MainWindow::add_line_edit(QLineEdit *line) {
     line->setMaximumWidth(80);
     iv_toolbar->addWidget(line); // add box for editing an initial value to the initial values tool bar (second)
+}
+
+// procedure for creating a field for a global error
+void MainWindow::add_read_only_line_edit(QLineEdit *line) {
+    line->setReadOnly(true);
+    line->setMaximumWidth(80);
+    global_errors_toolbar->addWidget(line); // add box for viewing a global error
+}
+
+// procedure for updating global errors
+void MainWindow::update_global_errors() {
+    for (int i = 0; i < 3; ++i) {
+        // convert double to std::string
+        std::ostringstream strs;
+        strs << (array_of_methods[i + 1]->get_global_error());
+
+        //convert std::string to QString
+        QString error = QString::fromStdString(strs.str());
+        global_error[i]->setText(error); // update
+    }
 }
 
 // slots that handle signals from checkboxes
@@ -237,6 +292,7 @@ void MainWindow::update_x0(QString text) {
     }
 
     d_plot->replot();
+    update_global_errors();
     threads.clear();
 }
 
@@ -266,6 +322,7 @@ void MainWindow::update_y0(QString text) {
     }
 
     d_plot->replot();
+    update_global_errors();
     threads.clear();
 }
 
@@ -295,6 +352,7 @@ void MainWindow::update_X(QString text) {
     }
 
     d_plot->replot();
+    update_global_errors();
     threads.clear();
 }
 
@@ -326,6 +384,7 @@ void MainWindow::update_step(QString text) {
         }
 
         d_plot->replot();
+        update_global_errors();
         threads.clear();
     }
 }
@@ -337,4 +396,5 @@ MainWindow::~MainWindow()
     delete d_plot;
     delete checkbox_toolbar;
     delete iv_toolbar;
+    delete global_errors_toolbar;
 }

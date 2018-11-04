@@ -17,6 +17,9 @@
 #include <qlineedit.h>
 
 #include <thread>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 #include "exact_method.h"
 #include "eulers_method.h"
@@ -51,16 +54,22 @@ private:
     QwtPlot *d_plot;
     QToolBar *checkbox_toolbar;
     QToolBar *iv_toolbar; // initial value fields toolbar
+    QToolBar *global_errors_toolbar;
     QCheckBox *box[7];
+    QLineEdit *global_error[3];
 
     approximation_curve *array_of_curves[7]; // [0] - exact, [1 - 3] - approximations, [4 - 6] - absolute errors
     abstract_computation_method *array_of_methods[4]; // [0] - exact, [1] - Euler, [2] - Improved Euler, [3] - Runge-Kutta
 
     void set_checkbox_toolbar();
     void set_iv_toolbar();
+    void set_global_errors_toolbar();
     void add_box(QCheckBox *box, QString text);
-    void add_label(QLabel *label, QString text);
+    void add_label(QToolBar *toolbar, QLabel *label, QString text);
     void add_line_edit(QLineEdit *line);
+    void add_read_only_line_edit(QLineEdit *line);
+
+    void update_global_errors();
 
 private Q_SLOTS:
     void toggle_exact_solution(bool is_checked);

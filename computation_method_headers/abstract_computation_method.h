@@ -20,12 +20,13 @@ public:
     abstract_computation_method();
     void compute_approximation();
     std::pair <QPolygonF, QPolygonF> get_approximation();
+    double get_global_error();
 
     void update_initial_values(int field_to_update, double new_value);
 
 protected:
     virtual QPointF get_next_point(QPointF prev_point) = 0;
-    QPointF get_next_error(QPointF);
+    QPointF get_next_local_error(QPointF);
     std::pair <QPolygonF, QPolygonF> computed_curves;
 
     double derivative(double x, double y);
@@ -37,6 +38,7 @@ protected:
     double x0;
     double y0;
     bool need_to_recompute; // shows whether there is need to recompute points
+    double global_error;
 };
 
 #endif // ABSTRACT_COMPUTATION_METHOD_H

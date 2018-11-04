@@ -3,7 +3,7 @@
 improved_eulers_error_curve::improved_eulers_error_curve()
 {
     // create error curve for Improved Euler's method
-    this->setTitle( "Improved Euler's approximation error curve" );
+    this->setTitle( "Improved Euler local error curve" );
     this->setPen( Qt::darkRed, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing

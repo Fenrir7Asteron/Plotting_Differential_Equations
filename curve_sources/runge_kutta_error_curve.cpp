@@ -3,7 +3,7 @@
 runge_kutta_error_curve::runge_kutta_error_curve()
 {
     // create error curve for Runge-Kutta method
-    this->setTitle( "Runge-Kutta approximation error curve" );
+    this->setTitle( "Runge-Kutta local error curve" );
     this->setPen( Qt::magenta, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing

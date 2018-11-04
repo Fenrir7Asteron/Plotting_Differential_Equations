@@ -3,7 +3,7 @@
 improved_eulers_approximation_curve::improved_eulers_approximation_curve()
 {
     // create approximation curve for Improved Euler's method
-    this->setTitle( "Improved Euler's approximate solution" );
+    this->setTitle( "Improved Euler approximate solution" );
     this->setPen( Qt::darkBlue, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing

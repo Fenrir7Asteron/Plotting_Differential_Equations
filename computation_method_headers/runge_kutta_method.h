@@ -11,7 +11,7 @@ public:
 
 protected:
     QPointF get_next_point(QPointF prev_point);
-    QPointF get_next_error(QPointF);
+    QPointF get_next_local_error(QPointF);
 };
 
 #endif // RUNGE_KUTTA_METHOD_H

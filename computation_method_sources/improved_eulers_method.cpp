@@ -16,10 +16,10 @@ QPointF improved_eulers_method::get_next_point(QPointF prev_point)
     return QPointF(xi + h, yi + (h * 0.5) * (k1 + k2));
 }
 
-// computes absolute error between exact and approximate solutions at a specific point
-QPointF improved_eulers_method::get_next_error(QPointF prev_point)
+// computes local error between exact and approximate solutions at a specific point
+QPointF improved_eulers_method::get_next_local_error(QPointF prev_point)
 {
-    return abstract_computation_method::get_next_error(prev_point);
+    return abstract_computation_method::get_next_local_error(prev_point);
 }
 
 // returns computed curves

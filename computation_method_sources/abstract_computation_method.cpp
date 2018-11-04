@@ -8,6 +8,7 @@ abstract_computation_method::abstract_computation_method()
     X = BORDER_X;
     h = STEP;
     need_to_recompute = true;
+    global_error = 0;
 }
 
 // given DE to compute in form y' = f(x, y)
@@ -40,6 +41,7 @@ void abstract_computation_method::compute_approximation()
 
         computed_points << current_point;
         error_points << QPointF(x0, 0);
+        global_error = 0;
 
         double xi = x0 + h;
 
@@ -49,7 +51,11 @@ void abstract_computation_method::compute_approximation()
             current_point = get_next_point(current_point); // calls function of an appropriate heir of abstract_computation_method
             computed_points << current_point;
 
-            error_points << get_next_error(current_point);
+            QPointF current_error = get_next_local_error(current_point);
+            error_points << current_error;
+            if (current_error.y() - global_error > EPS) {
+                global_error = current_error.y();
+            }
 
             xi = current_point.x();
         }
@@ -62,6 +68,7 @@ void abstract_computation_method::compute_approximation()
     }
 }
 
+
 // returns computed curves
 std::pair<QPolygonF, QPolygonF> abstract_computation_method::get_approximation()
 {
@@ -69,11 +76,15 @@ std::pair<QPolygonF, QPolygonF> abstract_computation_method::get_approximation()
 }
 
 // computes absolute error between exact and approximate solutions at a specific point
-QPointF abstract_computation_method::get_next_error(QPointF prev_point)
+QPointF abstract_computation_method::get_next_local_error(QPointF prev_point)
 {
     double xi = prev_point.x();
     double yi = prev_point.y();
     return QPointF(xi, fabs(exact_solution(xi) - yi));
+}
+
+double abstract_computation_method::get_global_error() {
+    return global_error;
 }
 
 // Updates initial values (IV). Is called when fields for initial values are changed.

@@ -18,10 +18,10 @@ QPointF runge_kutta_method::get_next_point(QPointF prev_point)
     return QPointF(xi + h, yi + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4));
 }
 
-// computes absolute error between exact and approximate solutions at a specific point
-QPointF runge_kutta_method::get_next_error(QPointF prev_point)
+// computes local error between exact and approximate solutions at a specific point
+QPointF runge_kutta_method::get_next_local_error(QPointF prev_point)
 {
-    return abstract_computation_method::get_next_error(prev_point);
+    return abstract_computation_method::get_next_local_error(prev_point);
 }
 
 // returns computed curves

@@ -4,7 +4,7 @@
 eulers_approximation_curve::eulers_approximation_curve()
 {
     // create approximation curve for Euler's method
-    this->setTitle( "Euler's approximate solution" );
+    this->setTitle( "Euler approximate solution" );
     this->setPen( Qt::blue, 5 ); // color and thickness of a curve
     this->setRenderHint
             ( QwtPlotItem::RenderAntialiased, true ); // antialiasing
